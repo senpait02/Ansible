@@ -1,0 +1,6 @@
+---
+- name: Copiar el {{ file }}
+  template:
+    src: ../files/issue.net.j2
+    dest: /etc/issue.net
+

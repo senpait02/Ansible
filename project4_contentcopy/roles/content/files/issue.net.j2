@@ -1,0 +1,6 @@
+{% if inventory_hostname in groups[ 'web' ] %}
+Webservers Node
+{% elif inventory_hostname in groups ['dba'] %}
+DBA Node
+{% else %}
+{% endif %}

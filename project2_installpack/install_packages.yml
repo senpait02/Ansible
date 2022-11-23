@@ -1,0 +1,33 @@
+---
+- hosts:
+  - dev
+  - qual
+  - web
+  become: true
+  gather_facts: false
+  tasks:
+  - name: Installar php and mariadb 
+    yum:
+      name: "{{ item }}"
+      state: present
+    loop: 
+       - mariadb
+       - php
+    when: inventory_hostname not in groups[ 'dev' ] 
+
+  - name: Instalar python3 en {{ inventory_hostname }}
+    yum:
+      name: python3
+      state: latest
+    when: inventory_hostname in groups[ 'qual' ]
+    notify: restart
+
+  handlers:
+  - name: restart
+    service:
+     name: php
+     state: restarted
+     enabled: true
+    when: inventory_hostname in groups[ 'qual' ]
+
+

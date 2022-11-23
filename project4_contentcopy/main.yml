@@ -1,0 +1,9 @@
+---
+- hosts: all
+  become: true
+  gather_facts: false
+  pre_tasks:
+  - name: Verificar primeroo la linea
+    ping:
+  roles:
+  - content  

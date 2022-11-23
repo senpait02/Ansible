@@ -1,0 +1,39 @@
+---
+- hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+  - name: Crear archivo
+    file:
+      path: /exam2
+      mode: '0775'
+      state: directory
+  - name: Crear directorio
+    file:
+      path: /home/devops/juanito
+      state: directory
+      owner: devops
+      group: devops
+  - name: Crear el link simbolico en el {{ inventory_hostname }}
+    file:
+      src: /exam2
+      dest: /home/devops/juanito
+      owner: devops
+      group: root
+      mode: '0775'
+      state: link
+      force: yes
+  - name: Crear el file
+    copy:
+      dest: /exam2/about.html
+      content: "All About Selinux"
+  - name: Otorgar permisos SELINUX
+    sefcontext:
+      target: '/exam2(/.*)?'
+      setype: httpd_sys_content_t
+      state: present
+    notify: restorecon
+  handlers:
+  - name: restorecon
+    shell: " restorecon -rv /exam2 " 
+   
